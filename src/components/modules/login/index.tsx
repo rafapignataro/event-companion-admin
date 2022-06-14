@@ -1,53 +1,92 @@
-import { FormEvent, useState } from 'react';
-import Head from 'next/head';
 import Image from 'next/image';
 
 import { authenticate } from '../../../services/authentication/authenticate';
 import { useUser } from '../../../contexts/user';
+import { Page } from '../../common/Page';
+import { Button, Col, Form, Input, Row, notification, Typography } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import Link from 'next/link';
+
+type FormFields = {
+	email: string;
+	password: string;
+}
 
 export const Login = () => {
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [loading, setLoading] = useState(false);
+	const [loginForm] = useForm();
 
-	const { saveUser } = useUser(); 
+	const { saveUser } = useUser();
 
-	const handleLoginSubmit = async (event: FormEvent) => {
+	const openNotification = (type: string, message: string, err?: string) => {
+		if (type == 'success' || type == 'error')
+			notification[type]({ message: message, description: err });
+		return;
+	};
+
+	const onFinishLogin = async ({ email, password }: FormFields) => {
 		try {
-			event.preventDefault();
-			setLoading(true);
-
 			const { token, user } = await authenticate({ email, password });
 
 			saveUser(token, user);
+			openNotification('success', 'Welcome back!');
 		} catch (err) {
-			alert(err.message);
-		} finally {
-			setLoading(false);
+			console.log(err)
+			openNotification('error', err.message || 'There was an error, try again later!');
 		}
-	};
+	}
 
 	return (
-		<div>
-			<Head>
-				<title>Login | Event Companion</title>
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
-			<div>
-				<Image src="/svg/logo.svg" width="150" height="150" />
-				<form onSubmit={handleLoginSubmit}>
-					<div>
-						<label htmlFor="email">E-mail</label>
-						<input id="email" type="email" value={email} onChange={event => setEmail(event.target.value)} />
-					</div>
-					<div>
-						<label>Password</label>
-						<input id="password" type="password" value={password} onChange={event => setPassword(event.target.value)} />
-					</div>
-					<button disabled={loading}>{loading ? 'Carregando...' : 'ENTRAR'}</button>
-				</form>
+		<Page title="Login">
+			<div style={{
+				height: '100vh',
+				width: '100%',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}>
+				<Row>
+					<Col span={24} style={{ marginBottom: '2rem' }}>
+						<Row align="middle" justify="center">
+							<Image src="/svg/logo.svg" width="150" height="150" />
+						</Row>
+					</Col>
+					<Col span={24}>
+						<Form
+							name="loginForm"
+							layout="vertical"
+							onFinish={onFinishLogin}
+							form={loginForm}
+						>
+							<Form.Item
+								name="email"
+								label="E-mail"
+								required
+								rules={[{ required: true, type: 'email', message: 'Please, provide your email!' }]}
+							>
+								<Input placeholder="Email" size="large" />
+							</Form.Item>
+							<Form.Item
+								name="password"
+								label="Password"
+								required
+								rules={[{ required: true, message: 'Please, provide your password!' }]}
+							>
+								<Input.Password placeholder="Senha" size="large" />
+							</Form.Item>
+							<Form.Item>
+								<Button
+									size="large"
+									type="primary"
+									block
+									htmlType="submit"
+									disabled={!loginForm.isFieldsTouched || !!loginForm.getFieldsError().filter(({ errors }) => errors.length).length}
+								>ENTER</Button>
+							</Form.Item>
+						</Form>
+					</Col>
+				</Row>
 			</div>
-		</div>
+		</Page >
 	);
 };
 

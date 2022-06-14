@@ -7,17 +7,18 @@ import { LoadingScreen } from '../LoadingScreen';
 import { Navigation } from './Navigation';
 
 type PageProps = {
-  title: string;
-  children: React.ReactNode
+	title: string;
+	children: React.ReactNode;
+	hideMenu?: boolean;
 }
 
-export const Page = ({ title, children }: PageProps) => {
+export const Page = ({ title, children, hideMenu }: PageProps) => {
 	const { loading } = useUser();
 	const router = useRouter();
 
 	const currentPage = router.pathname || '/';
 
-	if(loading) return <LoadingScreen />;
+	if (loading) return <LoadingScreen />;
 
 	return (
 		<>
@@ -26,8 +27,8 @@ export const Page = ({ title, children }: PageProps) => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Layout style={{ minHeight: '100vh' }}>
-				<Navigation selectedPage={currentPage} />
-				<Content style={{position: 'relative', padding: '1em'}}>
+				{!hideMenu && <Navigation selectedPage={currentPage} />}
+				<Content style={{ position: 'relative', padding: '1em' }}>
 					{children}
 				</Content>
 			</Layout>

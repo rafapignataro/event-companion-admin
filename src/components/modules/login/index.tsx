@@ -31,13 +31,12 @@ export const Login = () => {
 
 			saveUser(token, user);
 			openNotification('success', 'Welcome back!');
-		} catch (err) {
-			console.log(err)
+		} catch (err: any) {
 			openNotification('error', err.message || 'There was an error, try again later!');
 		} finally {
 			setLoading(false);
 		}
-	}
+	};
 
 	return (
 		<Page title="Login" hideMenu>

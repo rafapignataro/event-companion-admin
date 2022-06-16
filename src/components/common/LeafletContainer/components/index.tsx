@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from '../../../../contexts/location';
-import { Location, LocationCategory } from '../../../../services/locations/types';
+import { Location } from '../../../../services/locations/types';
 
 import { RiRainbowFill } from 'react-icons/ri';
 import { GiHotDog } from 'react-icons/gi';
@@ -22,7 +21,7 @@ type LocationAvatarProperties = {
 }
 
 export const LocationCard = ({ children }: { children: React.ReactNode }) => {
-	return(
+	return (
 		<div
 			style={{
 				borderRadius: '1em',
@@ -41,27 +40,27 @@ export const LocationCard = ({ children }: { children: React.ReactNode }) => {
 export const LocationAvatar = ({ category, zoomLevel, maxZoom }: LocationAvatarProperties) => {
 	const iconSwitch = (categoryCode: string) => {
 		switch (categoryCode) {
-		case 'FOOD':
-			return <GiHotDog />;
-		case 'ATTRACTION':
-			return <RiRainbowFill />;
-		case 'SHOPPING':
-			return <BiStore />;
-		default:
-			return <GrStatusPlaceholderSmall />;
+			case 'FOOD':
+				return <GiHotDog />;
+			case 'ATTRACTION':
+				return <RiRainbowFill />;
+			case 'SHOPPING':
+				return <BiStore />;
+			default:
+				return <GrStatusPlaceholderSmall />;
 		}
 	};
 
 	const colorSwitch = (categoryCode: string) => {
 		switch (categoryCode) {
-		case 'FOOD':
-			return '#59FF7D';
-		case 'ATTRACTION':
-			return '#FFE459';
-		case 'SHOPPING':
-			return '#FF9E59';
-		default:
-			return '#C7C7C7';
+			case 'FOOD':
+				return '#59FF7D';
+			case 'ATTRACTION':
+				return '#FFE459';
+			case 'SHOPPING':
+				return '#FF9E59';
+			default:
+				return '#C7C7C7';
 		}
 	};
 
@@ -73,9 +72,9 @@ export const LocationAvatar = ({ category, zoomLevel, maxZoom }: LocationAvatarP
 				border: '.25em solid #ffffff',
 				padding: '.25em',
 				background: colorSwitch(category),
-				fontSize: 30-((maxZoom-zoomLevel)*5),
+				fontSize: 30 - ((maxZoom - zoomLevel) * 5),
 				display: 'flex',
-				alignItems:	'center',
+				alignItems: 'center',
 				justifyContent: 'center',
 			}}
 		>
@@ -97,11 +96,11 @@ export const Icon = ({ location, zoomLevel, maxZoom }: LocationMarkerIconPropert
 		<>
 			<LocationCard>
 				<h2 style={{
-					marginRight: '1em', 
+					marginRight: '1em',
 					marginBottom: '0',
 					whiteSpace: 'nowrap',
 					fontFamily: 'Gilroy-Extrabold',
-					fontSize: 16-((maxZoom-zoomLevel)*3),
+					fontSize: 16 - ((maxZoom - zoomLevel) * 3),
 					padding: near ? '0.75em 2em' : '0'
 				}}>
 					{near && location.name}
@@ -122,12 +121,12 @@ export const Icon = ({ location, zoomLevel, maxZoom }: LocationMarkerIconPropert
 					bottom: 0,
 					transform: 'translate(0, 200%)',
 					width: 0,
-					height: 0, 
+					height: 0,
 					borderLeft: '10px solid transparent',
 					borderRight: '10px solid transparent',
 					borderTop: '15px solid #ffffff',
 					zIndex: -2,
-				}}/>
+				}} />
 			)}
 		</>
 	);

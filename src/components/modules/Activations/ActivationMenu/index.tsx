@@ -51,11 +51,7 @@ export const ActivationMenu = () => {
 	const { selectedLocation, selectLocation, refreshLocations } = useLocation();
 
 	useEffect(() => {
-		if (!selectedLocation) {
-			selectLocation(null);
-			setActivationFormOpen(false);
-			return;
-		}
+		setActivationFormOpen(false);
 	}, [selectedLocation]);
 
 	useEffect(() => {
@@ -110,6 +106,7 @@ export const ActivationMenu = () => {
 	};
 
 	const onFinishUpdate = async (values: FormFields) => {
+		console.log('zap');
 		if(!selectedLocation || !selectedActivation) return;
 
 		const isValidInterval = validateSelectedDateRange(
@@ -235,7 +232,7 @@ export const ActivationMenu = () => {
 											key={activation.id} 
 											value={activation.id}
 										>
-											{moment(activation.startDate).utc().format('DD/MM/YYYY - HH:mm')} até {moment(activation.endDate).utc().format('DD/MM/YYYY - HH:mm')}
+											{moment(activation.startDate).format('DD/MM/YYYY - HH:mm')} até {moment(activation.endDate).format('DD/MM/YYYY - HH:mm')}
 										</Select.Option>
 									);
 								})}

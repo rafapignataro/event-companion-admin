@@ -39,16 +39,6 @@ export const LocationCard = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const LocationAvatar = ({ category, zoomLevel, maxZoom }: LocationAvatarProperties) => {
-	const { locationCategoryList } = useLocation();
-	const [avatarProperties, setAvatarProperties] = useState<LocationCategory>({} as LocationCategory);
-
-	useEffect(() => {
-		setAvatarProperties(
-			locationCategoryList?.find(listCategory => listCategory.code === category) ||
-			{} as LocationCategory
-		);
-	}, [locationCategoryList]);
-
 	const iconSwitch = (categoryCode: string) => {
 		switch (categoryCode) {
 		case 'FOOD':
@@ -62,6 +52,19 @@ export const LocationAvatar = ({ category, zoomLevel, maxZoom }: LocationAvatarP
 		}
 	};
 
+	const colorSwitch = (categoryCode: string) => {
+		switch (categoryCode) {
+		case 'FOOD':
+			return '#59FF7D';
+		case 'ATTRACTION':
+			return '#FFE459';
+		case 'SHOPPING':
+			return '#FF9E59';
+		default:
+			return '#C7C7C7';
+		}
+	};
+
 	return (
 		<div
 			style={{
@@ -69,7 +72,7 @@ export const LocationAvatar = ({ category, zoomLevel, maxZoom }: LocationAvatarP
 				boxShadow: '0 1px 3px 0 rgba(0,0,0,0.25)',
 				border: '.25em solid #ffffff',
 				padding: '.25em',
-				background: avatarProperties.color || '#C7C7C7',
+				background: colorSwitch(category),
 				fontSize: 30-((maxZoom-zoomLevel)*5),
 				display: 'flex',
 				alignItems:	'center',
@@ -109,7 +112,7 @@ export const Icon = ({ location, zoomLevel, maxZoom }: LocationMarkerIconPropert
 					transform: 'translateX(50%)'
 				}}>
 					<ActivationBadge active={activationVisible} near={near}>
-						<LocationAvatar zoomLevel={zoomLevel} maxZoom={maxZoom} category={location.locationCategoryCode} />
+						<LocationAvatar zoomLevel={zoomLevel} maxZoom={maxZoom} category={location.locationCategory.code} />
 					</ActivationBadge>
 				</div>
 			</LocationCard>
